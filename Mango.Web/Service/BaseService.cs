@@ -1,7 +1,7 @@
-﻿using Mango.Web.Models;
-using Mango.Web.Service.IService;
-using Mango.Web.Utility;
-using Newtonsoft.Json;
+﻿global using Mango.Web.Utility;
+global using Mango.Web.Models;
+global using Mango.Web.Service.IService;
+global using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 
@@ -10,18 +10,22 @@ namespace Mango.Web.Service
     public class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-
-        public BaseService(IHttpClientFactory httpClientFactory)
+        private readonly ITokenProvider _tokenProvider;
+        public BaseService(IHttpClientFactory httpClientFactory, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
+            _tokenProvider = tokenProvider;
         }
 
-        public async Task<ResponseDTO?> SendAsync(RequestDTO request)
+        public async Task<ResponseDTO?> SendAsync(RequestDTO request, bool withBearer = true)
         {
             HttpClient client = _httpClientFactory.CreateClient("MangoAPI");
             HttpRequestMessage message = new();
             message.Headers.Add("Accept", "application/json");
-            // TODO - Token
+            if (withBearer)
+            {
+                message.Headers.Add("Authorization", $"Bearer {_tokenProvider.GetToken()}");
+            }
             message.RequestUri = new Uri(request.Url);
             if (request.Data is not null)
             {

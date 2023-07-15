@@ -1,6 +1,7 @@
-﻿using Mango.Services.CouponAPI.Models.DTO;
+﻿using Mango.Services.ProductAPI.Models;
+using Mango.Services.ProductAPI.Models.DTO;
 
-namespace Mango.Services.CouponAPI
+namespace Mango.Services.ProductAPI
 {
     public class MappingConfig
     {
@@ -8,8 +9,8 @@ namespace Mango.Services.CouponAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<Coupon, CouponDTO>();
-                config.CreateMap<CouponDTO, Coupon>();
+                config.CreateMap<Product, ProductDTO>();
+                config.CreateMap<ProductDTO, Product>();
             });
             return mappingConfig;
         }

@@ -22,6 +22,10 @@ namespace Mango.Web.Controllers
             {
                 objList = JsonConvert.DeserializeObject<List<CouponDTO>>(Convert.ToString(response.Result));
             }
+            else
+            {
+                TempData["error"] = response?.Message;
+            }
             return View(objList);
         }
         [HttpGet]
@@ -40,7 +44,7 @@ namespace Mango.Web.Controllers
                     TempData["success"] = "Coupon successfully created";
                     return RedirectToAction("Index");
                 }
-
+                TempData["error"] = response?.Message;
             }
             return View(coupon);
         }
