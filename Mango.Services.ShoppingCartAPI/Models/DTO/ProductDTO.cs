@@ -1,4 +1,4 @@
-﻿namespace Mango.Web.Models.DTO
+﻿namespace Mango.Services.ShoppingCartAPI.Models.DTO
 {
     public class ProductDTO
     {
@@ -8,10 +8,5 @@
         public string Description { get; set; }
         public string CategoryName { get; set; }
         public string ImageUrl { get; set; }
-        /// <summary>
-        /// Number of product to add to the cart
-        /// </summary>
-        [Range(1, 100)]
-        public int Count { get; set; } = 1;
     }
 }
