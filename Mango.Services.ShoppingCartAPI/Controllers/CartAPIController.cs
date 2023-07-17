@@ -32,11 +32,12 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                var headerFromDb = await _db.Headers.FirstOrDefaultAsync(x => x.Id == cart.CartHeader.Id);
+                var headerFromDb = await _db.Headers.FirstOrDefaultAsync(x => x.UserId == cart.CartHeader.UserId);
                 if (headerFromDb is null)
                 {
                     // create header and details;
                     CartHeader header = _mapper.Map<CartHeader>(cart.CartHeader);
+                    header.CouponCode = "";
                     _db.Headers.Add(header);
                     await _db.SaveChangesAsync();
                     cart.CartDetails.First().CartHeaderId = header.Id;
@@ -117,9 +118,9 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                     cart.CartHeader.CartTotal += item.Count * item.Product.Price;
                 }
 
-                if (cart.CartHeader.CouponId is not null && cart.CartHeader.CouponId != 0)
+                if (cart.CartHeader.CouponCode is not null && !string.IsNullOrEmpty(cart.CartHeader.CouponCode))
                 {
-                    CouponDTO coupon = await _couponService.GetCoupon((int)cart.CartHeader.CouponId);
+                    CouponDTO coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
                     if (coupon is not null && coupon.MinimalAmount <= cart.CartHeader.CartTotal)
                     {
                         cart.CartHeader.CartTotal -= coupon.DiscountAmount;
@@ -142,7 +143,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             try
             {
                 var cartFromDb = await _db.Headers.FirstAsync(x => x.UserId == cart.CartHeader.UserId);
-                cartFromDb.CouponId = cart.CartHeader.CouponId;
+                cartFromDb.CouponCode = cart.CartHeader.CouponCode;
                 _db.Headers.Update(cartFromDb);
                 await _db.SaveChangesAsync();
                 _response.Result = true;
@@ -160,7 +161,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             try
             {
                 var cartFromDb = await _db.Headers.FirstAsync(x => x.UserId == cart.CartHeader.UserId);
-                cartFromDb.CouponId = 0;
+                cartFromDb.CouponCode = "";
                 _db.Headers.Update(cartFromDb);
                 await _db.SaveChangesAsync();
                 _response.Result = true;

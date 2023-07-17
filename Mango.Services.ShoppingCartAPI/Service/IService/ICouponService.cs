@@ -4,6 +4,6 @@ namespace Mango.Services.ShoppingCartAPI.Service.IService
 {
     public interface ICouponService
     {
-        Task<CouponDTO> GetCoupon(int couponId);
+        Task<CouponDTO> GetCoupon(string couponCode);
     }
 }

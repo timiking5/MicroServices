@@ -7,7 +7,7 @@
         {
             _baseSerivce = service;
         }
-        public async Task<ResponseDTO> AssignRoleAsync(RegistrationDTO reg)
+        public async Task<ResponseDTO?> AssignRoleAsync(RegistrationDTO reg)
         {
             return await _baseSerivce.SendAsync(new RequestDTO()
             {
@@ -17,7 +17,7 @@
             });
         }
 
-        public async Task<ResponseDTO> LoginAsync(LoginDTO login)
+        public async Task<ResponseDTO?> LoginAsync(LoginDTO login)
         {
             return await _baseSerivce.SendAsync(new RequestDTO()
             {
@@ -27,7 +27,7 @@
             }, withBearer: false);
         }
 
-        public async Task<ResponseDTO> RegisterAsync(RegistrationDTO reg)
+        public async Task<ResponseDTO?> RegisterAsync(RegistrationDTO reg)
         {
             return await _baseSerivce.SendAsync(new RequestDTO()
             {
